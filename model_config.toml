@@ -1,0 +1,56 @@
+# Default model hyperparameters
+
+[logistic_regression]
+max_iter = 500
+solver = "lbfgs"
+penalty = "l2"
+
+[random_forest]
+n_estimators = 200
+max_depth = 10
+class_weight = "balanced"
+
+[gradient_boosting]
+learning_rate = 0.1
+n_estimators = 200
+max_depth = 3
+
+[xgboost]
+n_estimators = 300
+max_depth = 6
+subsample = 0.8
+colsample_bytree = 0.8
+
+# Grid Search Hyperparameter Grids
+
+[grid.logistic_regression]
+C = [0.01, 0.1, 1.0, 10.0, 100.0]
+penalty = ["l2"]
+
+[grid.random_forest]
+n_estimators = [100, 200, 300]
+max_depth = [5, 10, 20]
+min_samples_split = [2, 5]
+
+[grid.gradient_boosting]
+learning_rate = [0.01, 0.05, 0.1]
+n_estimators = [100, 200]
+max_depth = [2, 3, 4]
+
+[grid.xgboost]
+n_estimators = [200, 300, 500]
+max_depth = [3, 5, 7]
+learning_rate = [0.01, 0.05, 0.1]
+
+# Cross Validation settings
+
+[cv]
+folds = 8
+shuffle = true
+random_state = 42
+
+# General training config
+
+[training]
+scoring = "roc_auc"
+verbose = 1
