@@ -1,0 +1,12 @@
+{
+  "class_distribution": {
+    "0": 16259,
+    "1": 1639
+  },
+  "class_percentages": {
+    "0": 90.8425522404738,
+    "1": 9.157447759526203
+  },
+  "total_samples": 17898,
+  "is_imbalanced": true
+}

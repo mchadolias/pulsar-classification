@@ -1,0 +1,41 @@
+{
+  "best_model": "xgboost",
+  "all_models_trained": [
+    "logistic_regression",
+    "random_forest",
+    "gradient_boosting",
+    "xgboost"
+  ],
+  "dataset_info": {
+    "total_samples": 17898,
+    "features_count": 8,
+    "target_variable": "signal",
+    "class_balance": {
+      "0": 16259,
+      "1": 1639
+    }
+  },
+  "training_date": "2025-11-18T01:33:06.545074",
+  "model_performance": {
+    "logistic_regression": {
+      "roc_auc": 0.9746019335193352,
+      "recall": 0.7774390243902439,
+      "f1_score": 0.85
+    },
+    "random_forest": {
+      "roc_auc": 0.9738163006630067,
+      "recall": 0.8475609756097561,
+      "f1_score": 0.8701095461658842
+    },
+    "gradient_boosting": {
+      "roc_auc": 0.9742086483364834,
+      "recall": 0.8048780487804879,
+      "f1_score": 0.8655737704918033
+    },
+    "xgboost": {
+      "roc_auc": 0.9778625911259111,
+      "recall": 0.8201219512195121,
+      "f1_score": 0.8747967479674796
+    }
+  }
+}
