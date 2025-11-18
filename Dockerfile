@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y gcc g++ python3-dev && rm -rf /var/lib/
 ENV PATH="/code/.venv/bin:$PATH"
 
 # Copy dependency management files AND README.md
-COPY pyproject.toml uv.lock .python-version README.md LICENSE ./
+COPY pyproject.toml uv.lock .python-version README.md LICENSE DEPLOYMENT.md ./
 COPY scripts/ ./scripts/
 
 # Install dependencies using uv

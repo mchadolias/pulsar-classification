@@ -20,8 +20,9 @@ Pulsars are rare neutron stars that produce valuable scientific data. Manual cla
 
 ```markdown
 pulsar_classification/
+├── notebooks/                 # Jupyter Notebooks
 ├── scripts/
-│   ├── main.py                 # Main pipeline execution script
+│   ├── main.py                # Main pipeline execution script
 │   ├── config.py              # Configuration management
 │   ├── data_handler.py        # Data download, loading, and preprocessing
 │   ├── training.py            # Model training and evaluation
@@ -34,8 +35,6 @@ pulsar_classification/
 ├── data/
 │   ├── external/              # Raw downloaded data
 │   └── processed/             # Processed and split data
-├── config/
-│   └── training_config.toml   # Model configuration
 └── model_config.toml          # Hyperparameter configuration
 ```
 
