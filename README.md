@@ -118,7 +118,7 @@ Run the complete pipeline:
 uv run python scripts/main.py
 ```
 
-## 🏗️ Project Structure {#project-structure}
+## 🏗️ Project Structure 
 
 ```markdown
 pulsar_classification/
@@ -170,7 +170,7 @@ pulsar_classification/
 - **Prediction Storage**: Test predictions with probabilities
 - **Configuration Backup**: Training configuration preserved
 
-## ⚙️ Configuration {#configuration}
+## ⚙️ Configuration
 
 ### Model Configuration (`model_config.toml`)
 
@@ -515,7 +515,7 @@ curl -X 'POST' 'http://localhost:9696/predict_batch' \
 }
 ```
 
-## Web Deployment Fly.io {#web-deployment}
+## Web Deployment Fly.io 
 
 ![Flyio App](./outputs/screenshot/flyio_app.png)
 
@@ -527,8 +527,6 @@ The Pulsar Star Classification API has been successfully deployed and tested in 
 - ✅ Scalable containerized deployment
 
 Deployment Proof: The API was fully operational on fly.io with live endpoints serving predictions. Screenshots captured during deployment confirm all features working as expected, including the model serving accurate classifications with >92% precision.
-
-![Flyio App Details](./outputs/screenshot/flyio_app_details.png)
 
 ![Flyio App Deployment](./outputs/screenshot/flyio_deployment.png)
 
