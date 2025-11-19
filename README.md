@@ -517,6 +517,8 @@ curl -X 'POST' 'http://localhost:9696/predict_batch' \
 
 ## Web Deployment Fly.io {#web-deployment}
 
+![Flyio App](./outputs/screenshot/flyio_app.png)
+
 The Pulsar Star Classification API has been successfully deployed and tested in production environments. The application was deployed to fly.io and demonstrated full functionality including:
 
 - ✅ Real-time pulsar star predictions via REST API
@@ -526,7 +528,13 @@ The Pulsar Star Classification API has been successfully deployed and tested in 
 
 Deployment Proof: The API was fully operational on fly.io with live endpoints serving predictions. Screenshots captured during deployment confirm all features working as expected, including the model serving accurate classifications with >92% precision.
 
-Note: While the fly.io deployment has been taken down to manage infrastructure costs, the successful deployment demonstrated the API's production readiness and scalability principles. The containerized application can be easily redeployed to any cloud platform supporting Docker containers.
+![Flyio App Details](./outputs/screenshot/flyio_app_details.png)
+
+![Flyio App Deployment](./outputs/screenshot/flyio_deployment.png)
+
+**Note:** For a limited time the application will be available to the aforementioned hostname: `https://pulsar-classification.fly.dev`
+
+**Note:** While the fly.io deployment has been taken down to manage infrastructure costs, the successful deployment demonstrated the API's production readiness and scalability principles. The containerized application can be easily redeployed to any cloud platform supporting Docker containers.
 
 ## 🐍 Python Client Usage
 
