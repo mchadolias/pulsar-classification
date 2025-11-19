@@ -130,9 +130,14 @@ pulsar_classification/
 │   ├── training.py            # Model training and evaluation
 │   └── setup_directories.py   # Directory setup utility
 ├── outputs/
+│   ├── screenshots/           # Saved demo screenshots
 │   ├── models/                # Saved trained models
 │   ├── metrics/               # Evaluation metrics and results
 │   └── predictions/           # Prediction outputs
+├── examples/
+│   ├── test_cases.json        # Prediction cases for all options
+│   ├── single_prediction.json # Single prediction case
+│   └── batch_prediction.json  # Batch prediction case
 ├── logs/                      # Execution logs with timestamps
 ├── data/
 │   ├── external/              # Raw downloaded data
@@ -634,9 +639,21 @@ curl http://localhost:9696/health
 
 ## 📚 References
 
+### Academic & Dataset References
+
 1. [HTRU2 Dataset Repository (UC Irvine)](https://archive.ics.uci.edu/dataset/372/htru2)
 2. [Lyon, R. J., Stappers, B. W., et al. - Pulsar Classification](https://ui.adsabs.harvard.edu/abs/2016MNRAS.459.1104L)
 3. [Kaggle Pulsar Dataset](https://www.kaggle.com/datasets/charitarth/pulsar-dataset-htru2)
+
+### Key Library Documentation
+
+4. [FastAPI Documentation](https://fastapi.tiangolo.com/) - Modern web framework for building APIs
+5. [XGBoost Documentation](https://xgboost.readthedocs.io/) - Scalable and accurate gradient boosting
+6. [Scikit-learn Documentation](https://scikit-learn.org/stable/) - Machine learning in Python
+7. [Pydantic Documentation](https://docs.pydantic.dev/) - Data validation using Python type annotations
+8. [UV Documentation](https://docs.astral.sh/uv/) - Fast Python package and project manager
+9. [Docker Documentation](https://docs.docker.com/) - Containerization platform
+10. [Uvicorn Documentation](https://www.uvicorn.org/) - ASGI web server implementation
 
 ## 📝 License
 
