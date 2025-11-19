@@ -23,6 +23,7 @@ RUN uv sync --locked
 # Copy application code
 COPY predict.py ./
 COPY outputs/models/ ./models/
+COPY examples/ ./examples/
 
 # Expose the API port
 EXPOSE 9696
