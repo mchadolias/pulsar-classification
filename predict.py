@@ -1,14 +1,41 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field, validator
 import uvicorn
 import pickle
 import numpy as np
 import pandas as pd
 from typing import List
+from datetime import datetime
 
 MODEL_PATH = "models/best_xgboost_model.pkl"
 
-app = FastAPI(title="HTRU2 Pulsar Classifier API", version="1.0")
+app = FastAPI(
+    title="🌌 Pulsar Star Classification API",
+    description="""
+    ## Pulsar Detection Machine Learning API
+    
+    🔭 **Identify pulsar stars from radio telescope data**
+    
+    ### Model Performance:
+    - **ROC-AUC**: 0.9768 - Excellent discrimination
+    - **Recall**: 86.3% - Detects 86.3% of actual pulsars
+    - **F1-Score**: 89.3% - Balanced performance metric
+    - **Precision**: 92.5% - 92.5% of predicted pulsars are real
+    
+    ### Dataset Characteristics:
+    - **Class Distribution**: 90.8% non-pulsars / 9.2% pulsars
+    - **Best Model**: XGBoost Classifier
+    - **Training Data**: HTRU2 Pulsar Dataset (17,898 samples)
+    """,
+    version="1.1.0",
+    contact={
+        "name": "Michael Chadolias",
+        "url": "https://github.com/mchadolias/pulsar_classification",
+    },
+    docs_url="/docs",
+    redoc_url="/redoc",
+)
 
 with open(MODEL_PATH, "rb") as f:
     model = pickle.load(f)
@@ -118,14 +145,25 @@ def predict_batch_samples(payload: HTRUInputBatch) -> BatchPredictionResponse:
         raise HTTPException(status_code=400, detail=f"Batch prediction failed: {str(e)}")
 
 
-@app.get("/")
-def read_root():
-    return {"message": "HTRU2 Pulsar Classification API", "version": "1.0"}
-
-
 @app.get("/health")
-def health_check():
-    return {"status": "healthy", "model_loaded": True}
+async def health_check():
+    return {
+        "status": "healthy",
+        "model_loaded": True,
+        "version": "2.0.0",
+        "timestamp": datetime.now().isoformat(),
+        "performance": {
+            "roc_auc": 0.9768,
+            "recall": 0.8628,
+            "f1_score": 0.8927,
+            "precision": 0.925,  # Calculated from your confusion matrix
+        },
+        "dataset_info": {
+            "total_samples": 17898,
+            "class_distribution": {"non_pulsars": 0.9084, "pulsars": 0.0916},
+            "imbalance_ratio": "9.9:1",
+        },
+    }
 
 
 @app.get("/features")
@@ -144,6 +182,134 @@ def get_feature_names():
             "dm_skewness": "Skewness of the DM-SNR curve",
         },
     }
+
+
+@app.get("/", response_class=HTMLResponse)
+async def read_root():
+    return """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>🌌 Pulsar Classification API</title>
+        <style>
+            body { 
+                font-family: 'Segoe UI', Arial, sans-serif; 
+                max-width: 1200px; 
+                margin: 0 auto; 
+                padding: 20px; 
+                background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+                color: white;
+            }
+            .header { 
+                text-align: center; 
+                padding: 40px 0; 
+                background: rgba(255,255,255,0.1); 
+                border-radius: 15px;
+                margin-bottom: 30px;
+            }
+            .card { 
+                background: rgba(255,255,255,0.1); 
+                padding: 20px; 
+                margin: 15px 0; 
+                border-radius: 10px; 
+                border-left: 4px solid #4CAF50;
+            }
+            .endpoint { 
+                background: rgba(0,0,0,0.3); 
+                padding: 15px; 
+                margin: 10px 0; 
+                border-radius: 8px; 
+                font-family: monospace;
+            }
+            .btn { 
+                display: inline-block; 
+                padding: 10px 20px; 
+                margin: 5px; 
+                background: #4CAF50; 
+                color: white; 
+                text-decoration: none; 
+                border-radius: 5px; 
+            }
+            .metrics { 
+                display: grid; 
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+                gap: 15px; 
+                margin: 20px 0; 
+            }
+            .metric-card { 
+                background: rgba(255,255,255,0.15); 
+                padding: 15px; 
+                border-radius: 8px; 
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>🌌 Pulsar Star Classification API</h1>
+            <p>Machine Learning API for detecting pulsar stars with >92% precision!</p>
+        </div>
+        
+        <div class="card">
+            <h2>🚀 Quick Start</h2>
+            <p>Test the API with these endpoints:</p>
+            <a class="btn" href="/docs">API Documentation</a>
+            <a class="btn" href="/redoc">Alternative Docs</a>
+            <a class="btn" href="/health">Health Check</a>
+        </div>
+        
+        <div class="card">
+            <h2>📊 Model Performance</h2>
+            <div class="metrics">
+                <div class="metric-card">
+                    <h3>ROC-AUC</h3>
+                    <p>0.9768</p>
+                    <small>Area Under Curve</small>
+                </div>
+                <div class="metric-card">
+                    <h3>Recall</h3>
+                    <p>86.3%</p>
+                    <small>Pulsars Detected</small>
+                </div>
+                <div class="metric-card">
+                    <h3>F1-Score</h3>
+                    <p>89.3%</p>
+                    <small>Balance Measure</small>
+                </div>
+                <div class="metric-card">
+                    <h3>Precision</h3>
+                    <p>92.5%</p>
+                    <small>Correct Pulsar IDs</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>🔌 API Endpoints</h2>
+            <div class="endpoint">
+                <strong>POST</strong> /predict - Single prediction
+            </div>
+            <div class="endpoint">
+                <strong>POST</strong> /predict_batch - Batch predictions
+            </div>
+            <div class="endpoint">
+                <strong>GET</strong> /features - Feature specifications
+            </div>
+            <div class="endpoint">
+                <strong>GET</strong> /health - Service status
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>🔬 Technical Details</h2>
+            <p><strong>Model:</strong> XGBoost Classifier</p>
+            <p><strong>Dataset:</strong> HTRU2 Pulsar Dataset (17,898 samples)</p>
+            <p><strong>Features:</strong> 8 radio telescope measurements</p>
+            <p><strong>Deployment:</strong> Docker + FastAPI</p>
+        </div>
+    </body>
+    </html>
+    """
 
 
 if __name__ == "__main__":
