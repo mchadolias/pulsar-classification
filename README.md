@@ -27,6 +27,7 @@
   - [Available Endpoints](#available-endpoints)
   - [Feature Specifications](#feature-specifications)
   - [Making Predictions](#making-predictions)
+  - [Web Deployment](#web-deployment)
   - [Python Client Usage](#-python-client-usage)
   - [Interpretation Guide](#interpretation-guide)
 - [Technical Details](#-technical-details)
@@ -339,6 +340,8 @@ curl http://localhost:9696/health
 
 ## 🌐 API Usage
 
+![Main Page](./outputs/screenshot/docker_main_page_localhost.png)
+
 ![API Documentation](./outputs/screenshot/docker_docs_localhost.png)
 
 ### Available Endpoints
@@ -387,6 +390,58 @@ curl -X 'GET' 'http://localhost:9696/features' -H 'accept: application/json'
     "dm_kurtosis": "Excess kurtosis of the DM-SNR curve",
     "dm_skewness": "Skewness of the DM-SNR curve"
   }
+}
+```
+
+### Example Retrieval
+
+![Examples](./outputs/screenshot/docker_get_examples_localhost.png)
+
+```bash
+curl -X 'GET' \
+  'http://localhost:9696/examples' \
+  -H 'accept: application/json'
+```
+
+**Response:**
+
+```json
+{
+  "quick_test_commands": {
+    "health_check": "curl http://localhost:9696/health",
+    "get_features": "curl http://localhost:9696/features",
+    "get_examples": "curl http://localhost:9696/examples",
+    "single_prediction": "curl -X POST 'http://localhost:9696/predict' -H 'Content-Type: application/json' -d @examples/single_prediction.json",
+    "batch_prediction": "curl -X POST 'http://localhost:9696/predict_batch' -H 'Content-Type: application/json' -d @examples/batch_prediction.json",
+    "test_cases": "curl -X POST 'http://localhost:9696/predict_batch' -H 'Content-Type: application/json' -d @examples/test_cases.json"
+  },
+  "available_json_files": {
+    "examples/single_prediction.json": "Single sample prediction with high-probability pulsar features",
+    "examples/batch_prediction.json": "Batch prediction with mixed pulsar and non-pulsar samples",
+    "examples/test_cases.json": "Multiple test cases including high/low probability and borderline samples"
+  },
+  "json_file_structure": {
+    "single_prediction.json": {
+      "format": "{\"features\": [f1, f2, f3, f4, f5, f6, f7, f8]}",
+      "example": "{\"features\": [99.367, 41.572, 1.547, 4.154, 27.555, 61.719, 2.208, 3.662]}"
+    },
+    "batch_prediction.json": {
+      "format": "{\"samples\": [[f1..f8], [f1..f8], ...]}",
+      "example": "{\"samples\": [[99.367, 41.572, 1.547, 4.154, 27.555, 61.719, 2.208, 3.662], [80.0, 35.0, 0.5, 2.0, 30.0, 50.0, 1.5, 2.5]]}"
+    }
+  },
+  "usage_instructions": [
+    "1. Download the JSON files from the examples directory",
+    "2. Use curl with -d @filename.json to send the file content",
+    "3. All JSON files are pre-configured with valid test data",
+    "4. Modify the JSON files to test with your own feature values"
+  ],
+  "important_notes": [
+    "Use GET for information endpoints (/health, /features, /examples)",
+    "Use POST for prediction endpoints (/predict, /predict_batch)",
+    "All JSON files contain properly formatted 8-feature samples",
+    "Files are located in the 'examples/' directory"
+  ]
 }
 ```
 
@@ -460,6 +515,19 @@ curl -X 'POST' 'http://localhost:9696/predict_batch' \
 }
 ```
 
+## Web Deployment Fly.io {#web-deployment}
+
+The Pulsar Star Classification API has been successfully deployed and tested in production environments. The application was deployed to fly.io and demonstrated full functionality including:
+
+- ✅ Real-time pulsar star predictions via REST API
+- ✅ Interactive Swagger documentation at /docs endpoint
+- ✅ Health monitoring endpoints
+- ✅ Scalable containerized deployment
+
+Deployment Proof: The API was fully operational on fly.io with live endpoints serving predictions. Screenshots captured during deployment confirm all features working as expected, including the model serving accurate classifications with >92% precision.
+
+Note: While the fly.io deployment has been taken down to manage infrastructure costs, the successful deployment demonstrated the API's production readiness and scalability principles. The containerized application can be easily redeployed to any cloud platform supporting Docker containers.
+
 ## 🐍 Python Client Usage
 
 #### Single Prediction
@@ -504,8 +572,6 @@ python client.py --batch
 - **Hyperparameter Tuning**: GridSearchCV with cross-validation
 - **Automated Evaluation**: ROC-AUC, Recall, F1-Score, Confusion Matrix
 - **Feature Importance**: Model interpretability analysis
-
-
 
 ## 🔧 Troubleshooting
 

@@ -40,7 +40,7 @@ app = FastAPI(
     ---
     *For detailed documentation, visit the endpoints below.*
     """,
-    version="1.1.0",
+    version="1.2.0",
     contact={
         "name": "Michael Chadolias",
         "url": "https://github.com/mchadolias/pulsar_classification",
@@ -613,6 +613,7 @@ async def read_root():
             <a class="btn" href="/docs">API Documentation</a>
             <a class="btn" href="/redoc">Alternative Docs</a>
             <a class="btn" href="/health">Health Check</a>
+            <a class="btn" href="/examples">Examples</a>
         </div>
         
         <div class="card">
@@ -655,6 +656,9 @@ async def read_root():
             <div class="endpoint">
                 <strong>GET</strong> /health - Service status
             </div>
+            <div class="endpoint">
+                <strong>GET</strong> /examples - Predefined test examples
+            </div>
         </div>
         
         <div class="card">
@@ -663,6 +667,32 @@ async def read_root():
             <p><strong>Dataset:</strong> HTRU2 Pulsar Dataset (17,898 samples)</p>
             <p><strong>Features:</strong> 8 radio telescope measurements</p>
             <p><strong>Deployment:</strong> Docker + FastAPI</p>
+        </div>
+
+
+        <div class="card">
+            <h2>📁 GitHub Project</h2>
+            <p><strong>Repository:</strong> 
+                <a href="https://github.com/mchadolias/pulsar_classification" target="_blank" style="color: #4CAF50;">
+                    github.com/mchadolias/pulsar_classification
+                </a>
+            </p>
+            <p><strong>Description:</strong> ML classification for pulsar detection from radio telescope data</p>
+            <p><strong>Features:</strong></p>
+            <ul style="margin-left: 20px;">
+                <li>Complete ML pipeline from data acquisition to deployment</li>
+                <li>FastAPI REST API with real-time inference</li>
+                <li>Docker containerization for easy deployment</li>
+                <li>Comprehensive documentation and examples</li>
+            </ul>
+            <div style="margin-top: 15px;">
+                <a href="https://github.com/mchadolias/pulsar_classification" target="_blank" class="btn" style="background: #333; color: white;">
+                    📂 View on GitHub
+                </a>
+                <a href="https://github.com/mchadolias/pulsar_classification/issues" target="_blank" class="btn" style="background: #6e5494; color: white;">
+                    🐛 Report Issues
+                </a>
+            </div>
         </div>
     </body>
     </html>
