@@ -86,8 +86,8 @@ The HTRU2 dataset contains 8 features derived from the integrated pulse profile 
 1. **Clone the repository**
 
    ```bash
-   git clone <repository-url>
-   cd pulsar_classification
+   git clone git@github.com:mchadolias/pulsar-classification.git
+   cd pulsar-classification
    ```
 
 2. **Set up Kaggle API**
@@ -121,7 +121,7 @@ uv run python scripts/main.py
 ## 🏗️ Project Structure 
 
 ```markdown
-pulsar_classification/
+pulsar-classification/
 ├── notebooks/                 # Jupyter Notebooks
 ├── scripts/
 │   ├── main.py                # Main pipeline execution script
