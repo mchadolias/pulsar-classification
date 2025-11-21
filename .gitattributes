@@ -1,0 +1,15 @@
+# Language detection
+*.ipynb linguist-documentation
+*.ipynb -linguist-vendored
+*.md linguist-documentation
+
+# Binary files (common in ML)
+*.pkl binary
+*.model binary
+*.h5 binary
+*.joblib binary
+
+# Data files
+*.csv linguist-vendored
+*.json linguist-vendored
+*.parquet linguist-vendored
