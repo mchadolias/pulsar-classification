@@ -1,0 +1,3 @@
+[submodule "deployment/huggingface-space"]
+	path = deployment/huggingface-space
+	url = https://huggingface.co/spaces/mchadolias/pulsar-classification-htru2
