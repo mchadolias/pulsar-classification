@@ -564,6 +564,18 @@ Deployment Proof: The API was fully operational on fly.io with live endpoints se
 
 **Note:** While the fly.io deployment has been taken down to manage infrastructure costs, the successful deployment demonstrated the API's production readiness and scalability principles. The containerized application can be easily redeployed to any cloud platform supporting Docker containers.
 
+## Hugging Face Spaces
+
+Another way to deploy the app to Hugging Face has been implemented. Where you can see the final outcome of my deployed app at [mchadolias/pulsar-classification-htru2](https://huggingface.co/spaces/mchadolias/pulsar-classification-htru2/)
+
+Requirements for this method is to have an already set-up hugging face account. If you have any question regarding, how to set up your account check up this [guide](https://medium.com/@kirubasagar82/a-comprehensive-guide-to-creating-a-hugging-face-account-and-navigating-the-interface-d4796148b76f).
+
+```bash
+# Deploy to Hugging Face
+cd deployment
+./deploy_hf.sh
+```
+
 ## 🐍 Python Client Usage
 
 #### Single Prediction
@@ -694,6 +706,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-*Last Updated: 2025-11-25*  
+*Last Updated: 2025-11-26*  
 *Last Pipeline Execution: 2025-11-18 01:33:06*  
 *Best Model: XGBoost (ROC-AUC: 0.9768)*
