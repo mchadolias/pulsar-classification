@@ -101,8 +101,20 @@ The HTRU2 dataset contains 8 features derived from the integrated pulse profile 
 3. **Install dependencies**
 
    ```bash
-   uv sync
+    # Install only core dependencies
+    uv sync
+
+    # Install with dev dependencies
+    uv sync --extra dev
+
+    # Install with training dependencies  
+    uv sync --extra training
+
+    # Install with both dev and training (all dependecies)
+    uv sync --extra dev --extra training
    ```
+
+   **Note**: This is a new addition to have optional dependencies depending on the usage of the experiment. For new users, it is recommended to use all dependecies at once not to have issues with reproducibility.
 
 4. **Set up directories**
 
@@ -122,27 +134,40 @@ uv run python scripts/main.py
 
 ```markdown
 pulsar-classification/
-├── notebooks/                 # Jupyter Notebooks
+├── notebooks/
+|   ├── 01_data_exploration.ipynb  # Initial EDA notebook
+|   └── 02_kaggle_submission.ipynb # Kaggle posted notebook to dataset
+├── deployment/
+│   ├── client.py                  # API request script for the user
+│   ├── predict.py                 # FastAPI app initialization 
+│   └── examples/
+│       ├── test_cases.json        # Prediction cases for all options
+│       ├── single_prediction.json # Single prediction case
+│       └── batch_prediction.json  # Batch prediction case
 ├── scripts/
-│   ├── main.py                # Main pipeline execution script
-│   ├── config.py              # Configuration management
-│   ├── data_handler.py        # Data download, loading, and preprocessing
-│   ├── training.py            # Model training and evaluation
-│   └── setup_directories.py   # Directory setup utility
+│   ├── main.py                    # Main pipeline execution script
+│   ├── config.py                  # Configuration management
+│   ├── data_handler.py            # Data download, loading, and preprocessing
+│   ├── training.py                # Model training and evaluation
+│   └── setup_directories.py       # Directory setup utility
 ├── outputs/
-│   ├── screenshots/           # Saved demo screenshots
-│   ├── models/                # Saved trained models
-│   ├── metrics/               # Evaluation metrics and results
-│   └── predictions/           # Prediction outputs
-├── examples/
-│   ├── test_cases.json        # Prediction cases for all options
-│   ├── single_prediction.json # Single prediction case
-│   └── batch_prediction.json  # Batch prediction case
-├── logs/                      # Execution logs with timestamps
+│   ├── screenshots/               # Saved demo screenshots
+│   ├── models/                    # Saved trained models
+│   ├── metrics/                   # Evaluation metrics and results
+│   └── predictions/               # Prediction outputs
+├── logs/                          # Execution logs with timestamps
 ├── data/
-│   ├── external/              # Raw downloaded data
-│   └── processed/             # Processed and split data
-└── model_config.toml          # Hyperparameter configuration
+│   ├── external/                  # Raw downloaded data
+│   └── processed/                 # Processed and split data
+├── model_config.toml              # Hyperparameter configuration
+├── .dockerignore
+├── .python-version
+├── requirements.txt
+├── uv.lock
+├── setup.cfg
+├── README.md
+├── LICENSE
+└── Dockerfile
 ```
 
 ## 🔧 Features
@@ -669,6 +694,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-*Last Updated: 2025-11-19*  
+*Last Updated: 2025-11-25*  
 *Last Pipeline Execution: 2025-11-18 01:33:06*  
 *Best Model: XGBoost (ROC-AUC: 0.9768)*
