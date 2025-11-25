@@ -1,32 +1,34 @@
-# Use a base image with Python and minimal footprint
-FROM python:3.13-slim
+# Stage 1: Builder
+FROM python:3.13-slim AS builder
 
-# Copy uv binaries from GHCR image
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+WORKDIR /app
 
-# Set working directory
-WORKDIR /code
+RUN apt-get update && apt-get install -y --no-install-recommends gcc g++ python3-dev
 
-# Install compiler dependencies for building Python packages
-RUN apt-get update && apt-get install -y gcc g++ python3-dev && rm -rf /var/lib/apt/lists/*
+# Force CPU-only packages
+ENV XGBOOST_BUILD_CPU=1
+ENV XGBOOST_BUILD_GPU=0
 
-# Ensure the virtualenv PATH is first
-ENV PATH="/code/.venv/bin:$PATH"
-
-# Copy dependency management files AND README.md
 COPY pyproject.toml uv.lock .python-version README.md LICENSE ./
 COPY scripts/ ./scripts/
 
-# Install dependencies using uv
-RUN uv sync --locked
+RUN uv sync --locked --no-dev
 
-# Copy application code
-COPY predict.py ./
+# Stage 2: Runtime
+FROM python:3.13-slim
+WORKDIR /app
+
+COPY --from=builder /app/.venv /app/.venv
+ENV PATH="/app/.venv/bin:$PATH"
+
+COPY scripts/ ./scripts/
+COPY deployment/predict.py ./
+COPY deployment/examples/ ./examples/
 COPY outputs/models/ ./models/
-COPY examples/ ./examples/
 
-# Expose the API port
+RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+USER appuser
+
 EXPOSE 9696
-
-# Launch the FastAPI application
-ENTRYPOINT ["uvicorn", "predict:app", "--host", "0.0.0.0", "--port", "9696"]
+CMD ["uvicorn", "predict:app", "--host", "0.0.0.0", "--port", "9696"]

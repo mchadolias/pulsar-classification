@@ -1,0 +1,20 @@
+# Security
+.env
+.env.*
+*.key
+*.pem
+secrets/
+credentials/
+config/local.yaml
+
+# Performance - Large directories that slow context scanning
+.git/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Logs and outputs
+notebooks/
+logs/
+data/  
