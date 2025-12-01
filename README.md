@@ -16,21 +16,7 @@
 - [Features](#-features)
 - [Configuration](#configuration)
 - [Model Performance](#-model-performance)
-  - [Performance Summary](#performance-summary)
-  - [Best Model Selection](#best-model-selection)
-  - [Feature Importance](#feature-importance)
-- [Key Features Implementation](#-key-features-implementation)
-- [Model Interpretation](#-model-interpretation)
 - [Model Deployment](#-model-deployment)
-  - [Quick Deployment](#quick-deployment)
-- [API Usage](#-api-usage)
-  - [Available Endpoints](#available-endpoints)
-  - [Feature Specifications](#feature-specifications)
-  - [Making Predictions](#making-predictions)
-  - [Web Deployment](#web-deployment)
-  - [Python Client Usage](#-python-client-usage)
-  - [Interpretation Guide](#interpretation-guide)
-- [Technical Details](#-technical-details)
 - [Troubleshooting](#-troubleshooting)
 - [References](#-references)
 - [License](#-license)
@@ -72,7 +58,9 @@ The HTRU2 dataset contains 8 features derived from the integrated pulse profile 
 
 3. **Target**:
    - `signal`: Class label (0: noise, 1: pulsar)
-  
+
+![](outputs/screenshot/heatmap.png)
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -130,13 +118,16 @@ Run the complete pipeline:
 uv run python scripts/main.py
 ```
 
-## 🏗️ Project Structure 
+## Project Structure
 
 ```markdown
 pulsar-classification/
 ├── notebooks/
 |   ├── 01_data_exploration.ipynb  # Initial EDA notebook
 |   └── 02_kaggle_submission.ipynb # Kaggle posted notebook to dataset
+├── docs/
+│   ├── DEPLOYMENT.md              # Deployment instructions
+│   └── MODEL_PERFOMANCE.md        # Model perfomance report
 ├── deployment/
 │   ├── client.py                  # API request script for the user
 │   ├── predict.py                 # FastAPI app initialization 
@@ -200,7 +191,7 @@ pulsar-classification/
 - **Prediction Storage**: Test predictions with probabilities
 - **Configuration Backup**: Training configuration preserved
 
-## ⚙️ Configuration
+## Configuration
 
 ### Model Configuration (`model_config.toml`)
 
@@ -230,396 +221,52 @@ class_weight = "balanced"
 
 ### Performance Summary
 
-| Model | ROC-AUC | Recall | F1-Score | Training Time | Best Parameters |
-|-------|---------|--------|----------|---------------|-----------------|
-| **XGBoost** | **0.9768** | **0.8628** | **0.8927** | ~32 seconds | `learning_rate: 0.05`, `max_depth: 3`, `n_estimators: 200` |
-| Logistic Regression | 0.9746 | 0.7774 | 0.8500 | ~2 seconds | `C: 1.0`, `penalty: l2` |
-| Random Forest | 0.9738 | 0.8476 | 0.8701 | ~31 seconds | `max_depth: 10`, `min_samples_split: 2`, `n_estimators: 200` |
-| Gradient Boosting | 0.9742 | 0.8049 | 0.8656 | ~52 seconds | `learning_rate: 0.05`, `max_depth: 3`, `n_estimators: 200` |
+**Best Model: XGBoost**
 
-### Best Model Selection
+- **ROC-AUC**: 0.9768
+- **Recall**: 0.8628 (86.3% of pulsars correctly identified)
+- **F1-Score**: 0.8927
+- **Precision**: 0.925 (92.5% of predicted pulsars are correct)
 
-- **Selected Model**: **XGBoost**
-- **Selection Criteria**: Highest ROC-AUC score on validation set (0.9779)
-- **Final Test Performance**: ROC-AUC 0.9768, Recall 0.8628, F1-Score 0.8927
-
-### Feature Importance
-
-**Top features contributing to pulsar classification:**
-
-1. **ip_kurtosis**: 0.4368 (Integrated Profile Kurtosis)
-2. **ip_skewness**: 0.3520 (Integrated Profile Skewness)
-3. **dm_std**: 0.0678 (DM-SNR Curve Standard Deviation)
-4. **ip_std**: 0.0412 (Integrated Profile Standard Deviation)
-5. **ip_mean**: 0.0298 (Integrated Profile Mean)
-
-### Confusion Matrix Analysis (XGBoost - Test Set)
-
-```markdown
-[[3229   23]   # True Negatives | False Positives
- [  45  283]]  # False Negatives | True Positives
-```
-
-**Performance Analysis:**
+### Key Metrics (Test Set)
 
 - **True Positives**: 283 pulsars correctly identified
-- **True Negatives**: 3229 non-pulsars correctly identified  
-- **False Positives**: 23 non-pulsars misclassified as pulsars
+- **True Negatives**: 3229 non-pulsars correctly identified
+- **False Positives**: 23 non-pulsars misclassified
 - **False Negatives**: 45 pulsars missed
 
-**Key Metrics:**
+### Top Features
 
-- **Precision**: 92.5%
-- **Recall**: 86.3%
-- **F1-Score**: 89.3%
+1. **ip_kurtosis** (43.7% importance) - Integrated Profile Kurtosis
+2. **ip_skewness** (35.2% importance) - Integrated Profile Skewness
+3. **dm_std** (6.8% importance) - DM-SNR Curve Standard Deviation
 
-## ⚡ Performance Validation
-
-**Dataset Characteristics:**
-
-- **Small Size**: 17,898 samples × 8 features = 143,184 data points total
-- **Low Dimensionality**: Only 8 features reduces computational complexity
-- **Structured Data**: Clean, numerical data without missing values
-
-**Computational Efficiency:**
-
-- **Parallel Processing**: GridSearchCV used 8-fold CV with full CPU utilization
-- **Optimized Libraries**: scikit-learn and XGBoost are highly optimized C++ implementations
-- **Simple Models**: No deep learning or complex architectures
-
-### Quality Assurance Steps Taken
-
-1. **Stratified Splitting**: Maintained class distribution (90.84%/9.16%)
-2. **Cross-Validation**: 8-fold CV ensures robust hyperparameter tuning
-3. **Train-Validation-Test Split**: Proper evaluation protocol
-4. **Multiple Algorithms**: Consistent performance across different model types
-5. **Feature Importance**: Results align with domain knowledge (IP statistics most important)
-
-## 🎯 Key Features Implementation
-
-### Data Handling
-
-- **Class**: `HTRU2DataHandler`
-- **Methods**: Download, load, preprocess, split, export
-- **Error Handling**: Missing file detection, data validation
-
-### Model Training
-
-- **Class**: `ModelTrainer`
-- **Algorithms**: 4 different classifiers with hyperparameter tuning
-- **Evaluation**: Comprehensive metrics and cross-validation
-
-### Configuration Management
-
-- **Pydantic Settings**: Environment variable support
-- **TOML Config**: Model hyperparameters and training settings
-- **Reproducibility**: Fixed random seeds and version tracking
-
-## 🔍 Model Interpretation
-
-### Business Impact
-
-- **Recall Focus**: The model achieves 86.3% recall, meaning it correctly identifies 86.3% of actual pulsars
-- **Precision Consideration**: With 92.5% precision, only 7.5% of predicted pulsars are false positives
-- **Scientific Value**: The model significantly reduces manual verification workload while maintaining high detection rates
-
-### Technical Considerations
-
-- **Class Imbalance**: Successfully handled 9:1 class ratio through stratified sampling
-- **Feature Scaling**: Standardization improved performance of distance-based algorithms
-- **Model Calibration**: XGBoost provided well-calibrated probability estimates
-
-### Performance Insights
-
-1. **XGBoost Dominance**: Outperformed other models in both ROC-AUC and F1-score
-2. **Feature Importance**: Integrated profile statistics (kurtosis, skewness) are most predictive
-3. **Training Efficiency**: All models trained in under 1 minute total
-4. **Cross-Validation**: 8-fold CV provided robust hyperparameter tuning
+**Full Performance Report**: See detailed analysis in [MODEL_PERFORMANCE.md](docs/MODEL_PERFOMANCE.md)
 
 ## 🐳 Model Deployment
 
-### Quick Deployment
-
-#### 1a. Build Docker Image
+### Quick API Deployment
 
 ```bash
+# Build and run Docker container
 docker build -t pulsar-classification-api:latest .
-```
-
-#### 1b. Pull Docker Image from GitHub project
-
-In case this method is used, modify the name of the image you are using for the following steps accordingly.
-
-```bash
-docker pull ghcr.io/mchadolias/<project-name>:<tag>
-```
-
-#### 2. Run Container
-
-```bash
 docker run -it -p 9696:9696 pulsar-classification-api:latest
 ```
 
-#### 3. Verify Health
+### API Endpoints
 
-```bash
-curl http://localhost:9696/health
-```
+- `POST /predict` - Single sample prediction
+- `POST /predict_batch` - Batch prediction
+- `GET /health` - Service health check
+- `GET /features` - Expected feature names
 
-**Response:** `{"status":"healthy","model_loaded":true}`
+### Deployment Options
 
-## 🌐 API Usage
+- **Docker**: Local container deployment
+- **Fly.io**: Cloud deployment (demonstrated)
+- **Hugging Face Spaces**: [mchadolias/pulsar-classification-htru2](https://huggingface.co/spaces/mchadolias/pulsar-classification-htru2/)
 
-![Main Page](./outputs/screenshot/docker_main_page_localhost.png)
-
-![API Documentation](./outputs/screenshot/docker_docs_localhost.png)
-
-### Available Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/predict` | Single sample prediction |
-| `POST` | `/predict_batch` | Batch samples prediction |
-| `GET` | `/` | API information |
-| `GET` | `/health` | Service health check |
-| `GET` | `/features` | Expected feature names |
-
-![API Endpoints](./outputs/screenshot/docker_docs_localhost.png)
-
-### Feature Specifications
-
-![Feature Names](./outputs/screenshot/docker_get_features_localhost.png)
-
-Get expected features:
-
-```bash
-curl -X 'GET' 'http://localhost:9696/features' -H 'accept: application/json'
-```
-
-**Response:**
-
-```json
-{
-  "feature_names": [
-    "ip_mean",
-    "ip_std", 
-    "ip_kurtosis",
-    "ip_skewness",
-    "dm_mean",
-    "dm_std",
-    "dm_kurtosis",
-    "dm_skewness"
-  ],
-  "descriptions": {
-    "ip_mean": "Mean of the integrated profile",
-    "ip_std": "Standard deviation of the integrated profile",
-    "ip_kurtosis": "Excess kurtosis of the integrated profile",
-    "ip_skewness": "Skewness of the integrated profile",
-    "dm_mean": "Mean of the DM-SNR curve",
-    "dm_std": "Standard deviation of the DM-SNR curve",
-    "dm_kurtosis": "Excess kurtosis of the DM-SNR curve",
-    "dm_skewness": "Skewness of the DM-SNR curve"
-  }
-}
-```
-
-### Example Retrieval
-
-![Examples](./outputs/screenshot/docker_get_examples_localhost.png)
-
-```bash
-curl -X 'GET' \
-  'http://localhost:9696/examples' \
-  -H 'accept: application/json'
-```
-
-**Response:**
-
-```json
-{
-  "quick_test_commands": {
-    "health_check": "curl http://localhost:9696/health",
-    "get_features": "curl http://localhost:9696/features",
-    "get_examples": "curl http://localhost:9696/examples",
-    "single_prediction": "curl -X POST 'http://localhost:9696/predict' -H 'Content-Type: application/json' -d @examples/single_prediction.json",
-    "batch_prediction": "curl -X POST 'http://localhost:9696/predict_batch' -H 'Content-Type: application/json' -d @examples/batch_prediction.json",
-    "test_cases": "curl -X POST 'http://localhost:9696/predict_batch' -H 'Content-Type: application/json' -d @examples/test_cases.json"
-  },
-  "available_json_files": {
-    "examples/single_prediction.json": "Single sample prediction with high-probability pulsar features",
-    "examples/batch_prediction.json": "Batch prediction with mixed pulsar and non-pulsar samples",
-    "examples/test_cases.json": "Multiple test cases including high/low probability and borderline samples"
-  },
-  "json_file_structure": {
-    "single_prediction.json": {
-      "format": "{\"features\": [f1, f2, f3, f4, f5, f6, f7, f8]}",
-      "example": "{\"features\": [99.367, 41.572, 1.547, 4.154, 27.555, 61.719, 2.208, 3.662]}"
-    },
-    "batch_prediction.json": {
-      "format": "{\"samples\": [[f1..f8], [f1..f8], ...]}",
-      "example": "{\"samples\": [[99.367, 41.572, 1.547, 4.154, 27.555, 61.719, 2.208, 3.662], [80.0, 35.0, 0.5, 2.0, 30.0, 50.0, 1.5, 2.5]]}"
-    }
-  },
-  "usage_instructions": [
-    "1. Download the JSON files from the examples directory",
-    "2. Use curl with -d @filename.json to send the file content",
-    "3. All JSON files are pre-configured with valid test data",
-    "4. Modify the JSON files to test with your own feature values"
-  ],
-  "important_notes": [
-    "Use GET for information endpoints (/health, /features, /examples)",
-    "Use POST for prediction endpoints (/predict, /predict_batch)",
-    "All JSON files contain properly formatted 8-feature samples",
-    "Files are located in the 'examples/' directory"
-  ]
-}
-```
-
-### Making Predictions
-
-#### Single Prediction
-
-![Single Prediction](./outputs/screenshot/docker_predict_localhost.png)
-
-**Request:**
-
-```bash
-curl -X 'POST' 'http://localhost:9696/predict' \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "features": [
-      99.3671875,
-      41.57220208,
-      1.547196967,
-      4.154106043,
-      27.55518395,
-      61.71901588,
-      2.20880796,
-      3.662680136
-    ]
-  }'
-```
-
-**Response:**
-
-![Single Result](./outputs/screenshot/client_single_classification.png)
-
-```json
-{
-  "probability": 0.96047443151474,
-  "is_pulsar": true
-}
-```
-
-#### Batch Prediction
-
-**Request:**
-
-```bash
-curl -X 'POST' 'http://localhost:9696/predict_batch' \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "samples": [
-      [99.3671875, 41.57220208, 1.547196967, 4.154106043, 27.55518395, 61.71901588, 2.20880796, 3.662680136],
-      [140.0, 45.0, 1.8, 3.9, 25.0, 60.0, 2.1, 3.5]
-    ]
-  }'
-```
-
-**Response:**
-
-![Batch Result](./outputs/screenshot/client_batch_classification.png)
-
-```json
-{
-  "predictions": [
-    {
-      "probability": 0.96047443151474,
-      "is_pulsar": true
-    },
-    {
-      "probability": 0.9847214818000793,
-      "is_pulsar": true
-    }
-  ]
-}
-```
-
-## Web Deployment Fly.io 
-
-![Flyio App](./outputs/screenshot/flyio_app.png)
-
-The Pulsar Star Classification API has been successfully deployed and tested in production environments. The application was deployed to fly.io and demonstrated full functionality including:
-
-- ✅ Real-time pulsar star predictions via REST API
-- ✅ Interactive Swagger documentation at /docs endpoint
-- ✅ Health monitoring endpoints
-- ✅ Scalable containerized deployment
-
-Deployment Proof: The API was fully operational on fly.io with live endpoints serving predictions. Screenshots captured during deployment confirm all features working as expected, including the model serving accurate classifications with >92% precision.
-
-![Flyio App Deployment](./outputs/screenshot/flyio_deployment.png)
-
-**Note:** For a limited time the application will be available to the aforementioned hostname: `https://pulsar-classification.fly.dev`
-
-**Note:** While the fly.io deployment has been taken down to manage infrastructure costs, the successful deployment demonstrated the API's production readiness and scalability principles. The containerized application can be easily redeployed to any cloud platform supporting Docker containers.
-
-## Hugging Face Spaces
-
-Another way to deploy the app to Hugging Face has been implemented. Where you can see the final outcome of my deployed app at [mchadolias/pulsar-classification-htru2](https://huggingface.co/spaces/mchadolias/pulsar-classification-htru2/)
-
-Requirements for this method is to have an already set-up hugging face account. If you have any question regarding, how to set up your account check up this [guide](https://medium.com/@kirubasagar82/a-comprehensive-guide-to-creating-a-hugging-face-account-and-navigating-the-interface-d4796148b76f).
-
-```bash
-# Deploy to Hugging Face
-cd deployment
-./deploy_hf.sh
-```
-
-## 🐍 Python Client Usage
-
-#### Single Prediction
-
-```python
-python client.py
-```
-
-#### Batch Prediction  
-
-```python
-python client.py --batch
-```
-
-### Interpretation Guide
-
-#### Probability Thresholds
-
-- **≥ 0.5**: Classified as pulsar (`"is_pulsar": true`)
-- **< 0.5**: Classified as non-pulsar (`"is_pulsar": false`)
-
-#### Confidence Levels
-
-- **0.9-1.0**: High confidence pulsar
-- **0.7-0.9**: Moderate confidence pulsar  
-- **0.5-0.7**: Low confidence pulsar
-- **0.3-0.5**: Possible non-pulsar
-- **0.0-0.3**: High confidence non-pulsar
-
-## 🔧 Technical Details
-
-### Data Pipeline
-
-- **Automated Download**: Fetches dataset from Kaggle API
-- **Data Validation**: Checks for missing values and data quality
-- **Preprocessing**: Column renaming, numerical rounding, standardization
-- **Stratified Splitting**: Maintains class distribution across splits
-
-### Model Training
-
-- **Multiple Algorithms**: Logistic Regression, Random Forest, Gradient Boosting, XGBoost
-- **Hyperparameter Tuning**: GridSearchCV with cross-validation
-- **Automated Evaluation**: ROC-AUC, Recall, F1-Score, Confusion Matrix
-- **Feature Importance**: Model interpretability analysis
+**Full Deployment Guide**: See [DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed instructions.
 
 ## 🔧 Troubleshooting
 
@@ -694,7 +341,7 @@ curl http://localhost:9696/health
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
 ## 🤝 Contributing
 

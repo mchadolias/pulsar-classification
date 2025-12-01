@@ -23,6 +23,7 @@ COPY --from=builder /app/.venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
 
 COPY scripts/ ./scripts/
+COPY docs/ ./docs/
 COPY deployment/predict.py ./
 COPY deployment/examples/ ./examples/
 COPY outputs/models/ ./models/
