@@ -189,3 +189,10 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Remove generated files from tracking, best model/prediction and metrics will be available in the docker image
+outputs/models
+outputs/metrics
+outputs/predictions
+outputs/plots/training
+
