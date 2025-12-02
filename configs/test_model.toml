@@ -1,0 +1,96 @@
+# ==========================================================
+# Enhanced model_config.toml for Pulsar / Blazar Classification
+# Optimised for heavy class imbalance and F2-focused selection
+# ==========================================================
+
+[data]
+class_weights = true
+weight_strategy = "balanced"         # "balanced" or "custom"
+custom_weights = [1.0, 10.0]         # ignored unless strategy == "custom"
+
+numerical_features = []
+
+[threshold]
+optimization = true
+metric = "f2"                        
+beta = 2.0
+num_thresholds = 100
+method = "precision_recall"
+
+[metrics]
+primary = "f1"                      
+secondary = ["recall", "precision", "roc_auc"]
+average = "binary"
+zero_division = 0
+
+[evaluation]
+save_plots = true
+plot_format = "png"
+calibration = true
+
+# ----------------- Base Model Configs -----------------
+
+[logistic_regression]
+max_iter = 500
+solver = "lbfgs"
+penalty = "l2"
+
+[random_forest]
+n_estimators = 200
+max_depth = 10
+
+[gradient_boosting]
+learning_rate = 0.1
+n_estimators = 200
+max_depth = 3
+
+[xgboost]
+n_estimators = 300
+max_depth = 6
+subsample = 0.8
+colsample_bytree = 0.8
+
+# ----------------- Hyperparameter Grids -----------------
+
+[grid.logistic_regression]
+C = [0.1, 1.0]
+
+[grid.random_forest]
+n_estimators = [50, 100]
+max_depth = [5, 10]
+
+[grid.gradient_boosting]
+learning_rate = [0.05]
+n_estimators = [100]
+max_depth = [2, 3]
+
+[grid.xgboost]
+n_estimators = [100]
+max_depth = [3, 5]
+learning_rate = [0.05]
+
+
+# ----------------- Cross-validation -----------------
+
+[cv]
+folds = 2
+shuffle = true
+random_state = 42
+
+# ----------------- Training -----------------
+
+[training]
+verbose = 1
+n_jobs = -1
+
+# ----------------- Model selection -----------------
+
+[selection]
+criterion = "f2"
+min_score = 0.80
+
+# ----------------- Cost-sensitive evaluation -----------------
+
+[costs]
+false_positive = 1
+false_negative = 10

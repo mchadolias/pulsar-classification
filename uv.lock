@@ -1098,7 +1098,7 @@ wheels = [
 
 [[package]]
 name = "pulsar-classification-ml"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi" },
@@ -1112,6 +1112,24 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+all = [
+    { name = "black" },
+    { name = "fastapi" },
+    { name = "flake8" },
+    { name = "isort" },
+    { name = "kaggle" },
+    { name = "matplotlib" },
+    { name = "pandas" },
+    { name = "pydantic" },
+    { name = "pydantic-settings" },
+    { name = "python-dotenv" },
+    { name = "scikit-learn" },
+    { name = "seaborn" },
+    { name = "toml" },
+    { name = "ucimlrepo" },
+    { name = "uvicorn" },
+    { name = "xgboost" },
+]
 dev = [
     { name = "black" },
     { name = "flake8" },
@@ -1127,24 +1145,40 @@ training = [
 
 [package.metadata]
 requires-dist = [
+    { name = "black", marker = "extra == 'all'", specifier = ">=24.0.0" },
     { name = "black", marker = "extra == 'dev'", specifier = ">=24.0.0" },
     { name = "fastapi", specifier = ">=0.121.2" },
+    { name = "fastapi", marker = "extra == 'all'", specifier = ">=0.121.2" },
+    { name = "flake8", marker = "extra == 'all'", specifier = ">=7.0.0" },
     { name = "flake8", marker = "extra == 'dev'", specifier = ">=7.0.0" },
+    { name = "isort", marker = "extra == 'all'", specifier = ">=5.13.0" },
     { name = "isort", marker = "extra == 'dev'", specifier = ">=5.13.0" },
+    { name = "kaggle", marker = "extra == 'all'", specifier = ">=1.7.4.5" },
     { name = "kaggle", marker = "extra == 'training'", specifier = ">=1.7.4.5" },
+    { name = "matplotlib", marker = "extra == 'all'", specifier = ">=3.10.7" },
     { name = "matplotlib", marker = "extra == 'training'", specifier = ">=3.10.7" },
     { name = "pandas", specifier = ">=2.3.3" },
+    { name = "pandas", marker = "extra == 'all'", specifier = ">=2.3.3" },
     { name = "pydantic", specifier = ">=2.0.0" },
+    { name = "pydantic", marker = "extra == 'all'", specifier = ">=2.0.0" },
     { name = "pydantic-settings", specifier = ">=2.12.0" },
+    { name = "pydantic-settings", marker = "extra == 'all'", specifier = ">=2.12.0" },
     { name = "python-dotenv" },
+    { name = "python-dotenv", marker = "extra == 'all'" },
     { name = "scikit-learn", specifier = ">=1.7.2" },
+    { name = "scikit-learn", marker = "extra == 'all'", specifier = ">=1.7.2" },
+    { name = "seaborn", marker = "extra == 'all'", specifier = ">=0.13.2" },
     { name = "seaborn", marker = "extra == 'training'", specifier = ">=0.13.2" },
+    { name = "toml", marker = "extra == 'all'", specifier = ">=0.10.2" },
     { name = "toml", marker = "extra == 'dev'", specifier = ">=0.10.2" },
+    { name = "ucimlrepo", marker = "extra == 'all'", specifier = ">=0.0.7" },
     { name = "ucimlrepo", marker = "extra == 'training'", specifier = ">=0.0.7" },
     { name = "uvicorn", specifier = ">=0.38.0" },
+    { name = "uvicorn", marker = "extra == 'all'", specifier = ">=0.38.0" },
     { name = "xgboost", specifier = ">=3.1.1" },
+    { name = "xgboost", marker = "extra == 'all'", specifier = ">=3.1.1" },
 ]
-provides-extras = ["dev", "training"]
+provides-extras = ["dev", "training", "all"]
 
 [[package]]
 name = "pycodestyle"

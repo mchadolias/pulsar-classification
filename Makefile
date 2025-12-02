@@ -29,15 +29,15 @@ clean:
 ## Lint using flake8, black, and isort (use `make format` to do formatting)
 .PHONY: lint
 lint:
-	flake8 scripts
-	isort --check --diff scripts
-	black --check scripts
+	flake8 src
+	isort --check --diff src
+	black --check src
 
 ## Format source code with black
 .PHONY: format
 format:
-	isort scripts
-	black scripts
+	isort src
+	black src
 
 
 
@@ -48,7 +48,7 @@ format:
 create_environment:
 	uv venv --python $(PYTHON_VERSION)
 	@echo ">>> New uv virtual environment created. Activate with:"
-	@echo ">>> Windows: .\\\\.venv\\\\Scripts\\\\activate"
+	@echo ">>> Windows: .\\\\.venv\\\\src\\\\activate"
 	@echo ">>> Unix/macOS: source ./.venv/bin/activate"
 	
 
